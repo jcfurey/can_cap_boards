@@ -15,9 +15,10 @@ individually serviceable modern radial caps.
 |-------|-----|------------------|--------|
 | [`princeton_reverb_aa1164`](princeton_reverb_aa1164/) | Fender Princeton Reverb (AA1164) | 4-section can → 47/22/22/33 µF | design + BOM + SPICE done; layout pending |
 
-Each board folder contains its own `README.md` (design notes), `BOM.md`, a
-`sim/` directory with the SPICE supply model, and — once laid out — KiCad
-sources and fabrication outputs (gerbers).
+Each board folder contains its own `README.md` (design notes), `BOM.md`, an
+illustrated `design_reference.html` (schematic + mechanical drawings), a `sim/`
+directory with the SPICE supply model, and — once laid out — KiCad sources and
+fabrication outputs (gerbers).
 
 ## License
 

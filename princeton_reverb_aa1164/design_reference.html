@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Princeton Reverb AA1164 — Filter Cap Board</title>
+<style>
+  :root{
+    --paper:#f3f4f1;
+    --panel:#ffffff;
+    --ink:#15171a;
+    --ink-soft:#454a4e;
+    --line:#d7dad4;
+    --teal:#0f8a85;        /* blackface script turquoise, muted */
+    --teal-deep:#0a5f5c;
+    --ox:#a23b27;          /* high-voltage / caution */
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--sans);line-height:1.55;
+    font-size:16px;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px 80px}
+
+  /* ---- Header ---- */
+  header{background:var(--ink);color:#eef0ec;margin-bottom:34px}
+  .head-in{max-width:920px;margin:0 auto;padding:30px 20px 26px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--teal)}
+  header h1{font-size:clamp(26px,5vw,40px);line-height:1.05;margin:.35em 0 .15em;
+    font-weight:760;letter-spacing:-.02em}
+  header p{margin:0;color:#aab0ac;max-width:60ch;font-size:15px}
+  .specstrip{display:flex;flex-wrap:wrap;gap:0;margin-top:22px;
+    border:1px solid #2c3033;border-radius:8px;overflow:hidden}
+  .spec{flex:1 1 120px;padding:12px 14px;border-right:1px solid #2c3033;background:#1b1e21}
+  .spec:last-child{border-right:0}
+  .spec .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:#7f8682}
+  .spec .v{font-family:var(--mono);font-size:19px;color:#eef0ec;margin-top:3px}
+  .spec .v b{color:var(--teal)}
+
+  /* ---- Sections ---- */
+  section{margin:0 0 38px}
+  .sec-label{display:flex;align-items:baseline;gap:12px;margin:0 0 14px}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--teal-deep);font-weight:700}
+  h2{font-size:20px;margin:0;font-weight:700;letter-spacing:-.01em}
+  p.lede{color:var(--ink-soft);margin:.2em 0 1em}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:20px}
+  .fig{padding:8px 8px 4px}
+  .fig svg{width:100%;height:auto;display:block}
+  figcaption{font-size:13px;color:var(--ink-soft);padding:6px 12px 4px;
+    border-top:1px dashed var(--line);margin-top:6px}
+
+  /* ---- HV banner ---- */
+  .hv{display:flex;gap:12px;align-items:flex-start;background:#fbf1ee;
+    border:1px solid #e7c6bd;border-left:4px solid var(--ox);
+    border-radius:10px;padding:14px 16px;margin-bottom:30px}
+  .hv .icon{font-family:var(--mono);font-weight:700;color:var(--ox);
+    font-size:13px;letter-spacing:.1em;flex:0 0 auto;padding-top:1px}
+  .hv p{margin:0;font-size:14px;color:#5a3a31}
+
+  /* ---- Table ---- */
+  .tbl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--panel)}
+  table{border-collapse:collapse;width:100%;min-width:620px;font-size:14px}
+  thead th{background:#1b1e21;color:#eef0ec;text-align:left;padding:11px 13px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    font-weight:600;white-space:nowrap}
+  tbody td{padding:11px 13px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fafbf9}
+  .ref{font-family:var(--mono);font-weight:700;color:var(--teal-deep)}
+  .mono{font-family:var(--mono);font-size:13px}
+  td .sub{display:block;color:var(--ink-soft);font-size:12.5px;margin-top:2px}
+  .tag{display:inline-block;font-family:var(--mono);font-size:11px;
+    padding:1px 6px;border-radius:5px;background:#e6f1f0;color:var(--teal-deep);
+    border:1px solid #bfe0dd}
+
+  /* ---- Rules list ---- */
+  .rules{display:grid;gap:14px}
+  .rule{background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:15px 17px}
+  .rule h3{margin:0 0 4px;font-size:15px;display:flex;align-items:baseline;gap:9px}
+  .rule h3 .r-no{font-family:var(--mono);color:var(--teal);font-size:12px}
+  .rule p{margin:0;font-size:14px;color:var(--ink-soft)}
+  .rule p b{color:var(--ink)}
+  code{font-family:var(--mono);font-size:.92em;background:#eef0ec;
+    padding:1px 5px;border-radius:4px}
+
+  footer{border-top:1px solid var(--line);padding-top:18px;margin-top:8px;
+    font-size:12.5px;color:var(--ink-soft)}
+  footer .mono{font-size:12px}
+
+  @media(max-width:560px){
+    body{font-size:15px}
+    .spec{flex:1 1 100%;border-right:0;border-bottom:1px solid #2c3033}
+    .spec:last-child{border-bottom:0}
+  }
+  @media print{
+    body{background:#fff}
+    header{background:#fff;color:#000;border-bottom:2px solid #000}
+    .eyebrow,.spec .v b{color:#000}
+    .spec{background:#fff} .specstrip{border-color:#000}
+    .spec .k,.spec .v{color:#000} .spec{border-color:#bbb}
+    thead th{background:#eee;color:#000}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-in">
+    <div class="eyebrow">Filter cap board · drop-in can replacement</div>
+    <h1>Princeton Reverb AA1164</h1>
+    <p>Modern radial-electrolytic board to retire the original twist-lock can — an interior board with discrete, high-quality caps you can swap with an iron, and the existing B+ wiring landing on the fiber-board edge.</p>
+    <div class="specstrip">
+      <div class="spec"><div class="k">Node A · B+1</div><div class="v"><b>47</b>µF</div></div>
+      <div class="spec"><div class="k">Node B · B+2</div><div class="v"><b>22</b>µF</div></div>
+      <div class="spec"><div class="k">Node C · B+3</div><div class="v"><b>22</b>µF</div></div>
+      <div class="spec"><div class="k">Node D · B+4</div><div class="v"><b>33</b>µF</div></div>
+      <div class="spec"><div class="k">Rating</div><div class="v">500V · 105°C</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hv">
+    <div class="icon">⚠ HV</div>
+    <p>B+ on the reservoir node sits near <b>420&nbsp;VDC</b> in operation, and downstream nodes float up toward it during warm-up. Treat the whole board as lethal. Discharge every section before touching it — the on-board bleeder only drains node A while the board is connected to the amp.</p>
+  </div>
+
+  <!-- 1. OVERVIEW -->
+  <section>
+    <div class="sec-label"><span class="sec-num">01</span><h2>What this board does</h2></div>
+    <p class="lede">Four independent B+ nodes, each filtered by its own radial electrolytic. The dirty power-supply returns (reservoir + screens) sit on their own ground, separate from the clean preamp/reverb returns, joined at a single star tie — that keeps the rectifier's charging-pulse currents out of the preamp's ground reference for lower hum, while still presenting one ground to the chassis. The reservoir is bumped to 47µF to firm up the low end (within the GZ34's ~60µF input limit); the preamp/reverb node is set to 33µF for a touch of headroom on an already-quiet amp, on a footprint that will still accept 47µF later. Screens and the PI/reverb-driver node stay at the stock 22µF, where extra capacitance buys nothing audible.</p>
+  </section>
+
+  <!-- 2. SCHEMATIC -->
+  <section>
+    <div class="sec-label"><span class="sec-num">02</span><h2>Schematic</h2></div>
+    <div class="card fig">
+      <svg viewBox="0 0 720 430" role="img" aria-label="Filter cap board schematic">
+        <defs>
+          <style>
+            .wire{stroke:#15171a;stroke-width:2;fill:none}
+            .plate{stroke:#15171a;stroke-width:2.4;fill:none}
+            .lbl{font-family:var(--mono,monospace);font-size:13px;fill:#15171a}
+            .val{font-family:var(--mono,monospace);font-size:13px;fill:#0a5f5c;font-weight:700}
+            .fn{font-family:var(--mono,monospace);font-size:10.5px;fill:#454a4e;letter-spacing:.04em}
+            .tab{fill:#0f8a85}
+            .tabtx{font-family:var(--mono,monospace);font-size:13px;fill:#fff;font-weight:700}
+            .cap{font-family:var(--mono,monospace);font-size:13px;fill:#a23b27;font-weight:700}
+          </style>
+        </defs>
+
+        <!-- split ground rails: power (A,B + bleeder) | preamp/reverb (C,D) -->
+        <line class="wire" x1="100" y1="372" x2="400" y2="372"/>
+        <line class="wire" x1="450" y1="372" x2="690" y2="372"/>
+        <text class="fn" x="105" y="390">GND-PWR · A·B + bleeder</text>
+        <text class="fn" x="560" y="390" text-anchor="middle">GND-PRE · C·D</text>
+
+        <!-- star link bridging the two rails -->
+        <line class="wire" x1="400" y1="372" x2="411" y2="372"/>
+        <rect x="411" y="366" width="28" height="12" rx="2" class="plate" fill="#fff"/>
+        <line class="wire" x1="439" y1="372" x2="450" y2="372"/>
+        <text class="cap" x="425" y="359" text-anchor="middle">★</text>
+        <text class="fn" x="425" y="347" text-anchor="middle">star link</text>
+
+        <!-- single chassis tie at the star -->
+        <line class="wire" x1="425" y1="378" x2="425" y2="394"/>
+        <line class="wire" x1="412" y1="394" x2="438" y2="394"/>
+        <line class="wire" x1="416" y1="400" x2="434" y2="400"/>
+        <line class="wire" x1="420" y1="406" x2="430" y2="406"/>
+        <text class="fn" x="446" y="403">1 chassis tie (link fitted)</text>
+
+        <!-- caption top -->
+        <text class="fn" x="170" y="22">B+ feeds — existing amp wires solder into wire-entry pads</text>
+        <line class="wire" x1="170" y1="30" x2="650" y2="30" stroke-dasharray="3 4" stroke-width="1.2"/>
+
+        <!-- ===== Branch generator (manual) ===== -->
+        <!-- A : x=200 -->
+        <rect class="tab" x="176" y="40" width="48" height="20" rx="3"/>
+        <text class="tabtx" x="200" y="54" text-anchor="middle">A</text>
+        <text class="fn" x="200" y="76" text-anchor="middle">B+1 · RESERVOIR</text>
+        <text class="fn" x="200" y="88" text-anchor="middle">6V6 PLATES</text>
+        <line class="wire" x1="200" y1="92" x2="200" y2="168"/>
+        <line class="plate" x1="178" y1="168" x2="222" y2="168"/>
+        <path class="plate" d="M178 184 Q200 173 222 184"/>
+        <text class="cap" x="208" y="164">+</text>
+        <line class="wire" x1="200" y1="184" x2="200" y2="372"/>
+        <text class="val" x="200" y="230" text-anchor="middle">47µF</text>
+        <text class="lbl" x="200" y="247" text-anchor="middle">500V</text>
+
+        <!-- B : x=360 -->
+        <rect class="tab" x="336" y="40" width="48" height="20" rx="3"/>
+        <text class="tabtx" x="360" y="54" text-anchor="middle">B</text>
+        <text class="fn" x="360" y="76" text-anchor="middle">B+2 · SCREENS</text>
+        <line class="wire" x1="360" y1="92" x2="360" y2="168"/>
+        <line class="plate" x1="338" y1="168" x2="382" y2="168"/>
+        <path class="plate" d="M338 184 Q360 173 382 184"/>
+        <text class="cap" x="368" y="164">+</text>
+        <line class="wire" x1="360" y1="184" x2="360" y2="372"/>
+        <text class="val" x="360" y="230" text-anchor="middle">22µF</text>
+        <text class="lbl" x="360" y="247" text-anchor="middle">500V</text>
+
+        <!-- C : x=500 -->
+        <rect class="tab" x="476" y="40" width="48" height="20" rx="3"/>
+        <text class="tabtx" x="500" y="54" text-anchor="middle">C</text>
+        <text class="fn" x="500" y="76" text-anchor="middle">B+3 · PI /</text>
+        <text class="fn" x="500" y="88" text-anchor="middle">REVERB DRIVER</text>
+        <line class="wire" x1="500" y1="92" x2="500" y2="168"/>
+        <line class="plate" x1="478" y1="168" x2="522" y2="168"/>
+        <path class="plate" d="M478 184 Q500 173 522 184"/>
+        <text class="cap" x="508" y="164">+</text>
+        <line class="wire" x1="500" y1="184" x2="500" y2="372"/>
+        <text class="val" x="500" y="230" text-anchor="middle">22µF</text>
+        <text class="lbl" x="500" y="247" text-anchor="middle">500V</text>
+
+        <!-- D : x=640 -->
+        <rect class="tab" x="616" y="40" width="48" height="20" rx="3"/>
+        <text class="tabtx" x="640" y="54" text-anchor="middle">D</text>
+        <text class="fn" x="640" y="76" text-anchor="middle">B+4 · PREAMP /</text>
+        <text class="fn" x="640" y="88" text-anchor="middle">REVERB RECOVERY</text>
+        <line class="wire" x1="640" y1="92" x2="640" y2="168"/>
+        <line class="plate" x1="618" y1="168" x2="662" y2="168"/>
+        <path class="plate" d="M618 184 Q640 173 662 184"/>
+        <text class="cap" x="648" y="164">+</text>
+        <line class="wire" x1="640" y1="184" x2="640" y2="372"/>
+        <text class="val" x="640" y="230" text-anchor="middle">33µF</text>
+        <text class="lbl" x="640" y="247" text-anchor="middle">500V</text>
+        <text class="fn" x="640" y="268" text-anchor="middle">pad fits 22–47µF</text>
+
+        <!-- Bleeder off node A, to the left -->
+        <line class="wire" x1="200" y1="120" x2="120" y2="120"/>
+        <line class="wire" x1="120" y1="120" x2="120" y2="150"/>
+        <rect x="110" y="150" width="20" height="42" rx="2" class="plate" fill="#fff"/>
+        <line class="wire" x1="120" y1="192" x2="120" y2="206"/>
+        <rect x="110" y="206" width="20" height="42" rx="2" class="plate" fill="#fff"/>
+        <line class="wire" x1="120" y1="248" x2="120" y2="372"/>
+        <text class="fn" x="92" y="300">2 × 100k</text>
+        <text class="fn" x="92" y="313">2W (series)</text>
+        <text class="fn" x="92" y="326">= 200k</text>
+        <text class="fn" x="92" y="339">bleeder</text>
+      </svg>
+      <figcaption>Two ground groups — GND-PWR for the dirty returns (caps A·B + bleeder), GND-PRE for the clean preamp/reverb returns (caps C·D) — meeting at one star link. Fit the link for a single chassis tie; omit it and run each group to its own ground bus for a true split return. Node-to-stage roles follow the AA1164 layout — verify against your actual wiring on a clone.</figcaption>
+    </div>
+  </section>
+
+  <!-- 3. BOM -->
+  <section>
+    <div class="sec-label"><span class="sec-num">03</span><h2>Bill of materials</h2></div>
+    <div class="tbl-scroll">
+      <table>
+        <thead>
+          <tr><th>Ref</th><th>Qty</th><th>Value</th><th>Rating</th><th>Part / footprint</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="ref">C1</td><td>1</td><td class="mono">47µF</td><td class="mono">500V 105°C</td>
+            <td><span class="mono">Nichicon UCY2H470MHD</span><span class="sub">radial, 7.5mm pitch, ~16 × 40mm</span></td>
+            <td>Reservoir (node A). Tightens low end.</td>
+          </tr>
+          <tr>
+            <td class="ref">C2</td><td>1</td><td class="mono">22µF</td><td class="mono">500V 105°C</td>
+            <td><span class="mono">Nichicon UCY2H220M__</span><span class="sub">same family — confirm case suffix/size</span></td>
+            <td>Screens (node B).</td>
+          </tr>
+          <tr>
+            <td class="ref">C3</td><td>1</td><td class="mono">22µF</td><td class="mono">500V 105°C</td>
+            <td><span class="mono">Nichicon UCY2H220M__</span><span class="sub">same family — confirm case suffix/size</span></td>
+            <td>PI / reverb driver (node C).</td>
+          </tr>
+          <tr>
+            <td class="ref">C4</td><td>1</td><td class="mono">33µF</td><td class="mono">500V 105°C</td>
+            <td><span class="mono">Nichicon UCY2H330M__</span><span class="sub">confirm suffix · lay out pad for 47µF body</span></td>
+            <td>Preamp / reverb recovery (node D). <span class="tag">retunable 22–47µF</span></td>
+          </tr>
+          <tr>
+            <td class="ref">R1, R2</td><td>2</td><td class="mono">100kΩ</td><td class="mono">2W, ≥350V</td>
+            <td><span class="mono">metal-oxide / flameproof, axial</span></td>
+            <td>Series across node A = 200k bleeder (~0.9W total, split).</td>
+          </tr>
+          <tr>
+            <td class="ref">P1–P4</td><td>4</td><td>—</td><td>—</td>
+            <td><span class="mono">wire-entry PTH, ~1.6mm finished</span><span class="sub">no purchased part — board feature</span></td>
+            <td>Existing B+ wires poke up through the knockout and solder in.</td>
+          </tr>
+          <tr>
+            <td class="ref">GND-PWR / GND-PRE</td><td>2</td><td>—</td><td>—</td>
+            <td><span class="mono">2 × wire-entry PTH + chassis lug</span></td>
+            <td>Separate dirty (A·B) and clean (C·D) returns; meet at the star.</td>
+          </tr>
+          <tr>
+            <td class="ref">JP1</td><td>1</td><td>—</td><td>0Ω / link</td>
+            <td><span class="mono">solder bridge or wire link</span></td>
+            <td>Star: fit = one chassis tie; omit = dual return to amp ground buses.</td>
+          </tr>
+          <tr>
+            <td class="ref">PCB</td><td>1</td><td>—</td><td>—</td>
+            <td><span class="mono">FR-4, 2-layer, 1.6mm, 1oz Cu</span><span class="sub">rectangular ~50–60mm (2×2)</span></td>
+            <td>1oz meets ≥½oz; ≥2.5mm HV creepage; optional slots + conformal coat.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4. MECHANICAL -->
+  <section>
+    <div class="sec-label"><span class="sec-num">04</span><h2>Board &amp; mechanical layout</h2></div>
+    <p class="lede">This mounts inside the chassis among the existing circuitry, not over the knockout. The wire-entry holes sit in a row along one edge — the edge facing your fiber board — so the existing B+ wires land straight across with no wrapping. Caps stand off the opposite face; mount on standoffs with both holes isolated. The empty can hole is best capped separately with a simple blanking plate or plug.</p>
+    <div class="card fig">
+      <svg viewBox="0 0 720 470" role="img" aria-label="Board top view and interior edge view">
+        <defs>
+          <style>
+            .bd{stroke:#15171a;stroke-width:2;fill:#fff}
+            .ko{stroke:#0f8a85;stroke-width:1.6;fill:#e6f1f0;stroke-dasharray:5 4}
+            .capc{stroke:#15171a;stroke-width:1.6;fill:#ffffff;fill-opacity:.0}
+            .capf{stroke:#15171a;stroke-width:1.6;fill:#a23b27;fill-opacity:.08}
+            .dim{stroke:#454a4e;stroke-width:1;fill:none}
+            .t{font-family:var(--mono,monospace);font-size:12px;fill:#15171a}
+            .tt{font-family:var(--mono,monospace);font-size:11px;fill:#454a4e}
+            .tv{font-family:var(--mono,monospace);font-size:12px;fill:#a23b27;font-weight:700}
+            .tk{font-family:var(--mono,monospace);font-size:11px;fill:#0a5f5c;font-weight:700}
+            .utab{stroke:#0f8a85;stroke-width:1.4;fill:#fff;stroke-dasharray:3 3}
+          </style>
+        </defs>
+
+        <!-- ===== TOP VIEW ===== -->
+        <text class="tt" x="40" y="26">TOP VIEW</text>
+        <!-- board: rectangular interior board -->
+        <rect class="bd" x="70" y="90" width="300" height="240" rx="8"/>
+
+        <!-- corner mount holes (isolated) -->
+        <circle class="bd" cx="90" cy="112" r="6"/>
+        <circle class="bd" cx="350" cy="308" r="6"/>
+
+        <!-- caps 2x2 -->
+        <circle class="capf" cx="135" cy="145" r="40"/>
+        <circle class="capf" cx="285" cy="145" r="40"/>
+        <circle class="capf" cx="135" cy="245" r="40"/>
+        <circle class="capf" cx="285" cy="245" r="40"/>
+        <text class="tv" x="135" y="142" text-anchor="middle">C1</text>
+        <text class="tt" x="135" y="156" text-anchor="middle">47µF</text>
+        <text class="tv" x="285" y="142" text-anchor="middle">C2</text>
+        <text class="tt" x="285" y="156" text-anchor="middle">22µF</text>
+        <text class="tv" x="135" y="242" text-anchor="middle">C3</text>
+        <text class="tt" x="135" y="256" text-anchor="middle">22µF</text>
+        <text class="tv" x="285" y="242" text-anchor="middle">C4</text>
+        <text class="tt" x="285" y="256" text-anchor="middle">33µF</text>
+
+        <!-- wire-entry holes in a row along the fiber-board edge -->
+        <circle cx="100" cy="310" r="7" fill="#0a5f5c"/><circle cx="100" cy="310" r="3" fill="#fff"/>
+        <circle cx="140" cy="310" r="7" fill="#0a5f5c"/><circle cx="140" cy="310" r="3" fill="#fff"/>
+        <circle cx="180" cy="310" r="7" fill="#0a5f5c"/><circle cx="180" cy="310" r="3" fill="#fff"/>
+        <circle cx="220" cy="310" r="7" fill="#0a5f5c"/><circle cx="220" cy="310" r="3" fill="#fff"/>
+        <circle cx="272" cy="310" r="7" fill="#454a4e"/><circle cx="272" cy="310" r="3" fill="#fff"/>
+        <circle cx="312" cy="310" r="7" fill="#5b6168"/><circle cx="312" cy="310" r="3" fill="#fff"/>
+        <text class="tk" x="100" y="297" text-anchor="middle" font-size="10">A</text>
+        <text class="tk" x="140" y="297" text-anchor="middle" font-size="10">B</text>
+        <text class="tk" x="180" y="297" text-anchor="middle" font-size="10">C</text>
+        <text class="tk" x="220" y="297" text-anchor="middle" font-size="10">D</text>
+        <text class="tt" x="272" y="297" text-anchor="middle" font-size="9">GP</text>
+        <text class="tt" x="312" y="297" text-anchor="middle" font-size="9">GR</text>
+
+        <!-- ground pour split + star -->
+        <line class="dim" x1="78" y1="195" x2="362" y2="195" stroke-dasharray="6 4"/>
+        <text class="tt" x="220" y="138" text-anchor="middle">GND-PWR (A·B)</text>
+        <text class="tt" x="220" y="252" text-anchor="middle">GND-PRE (C·D)</text>
+        <text class="tv" x="220" y="200" text-anchor="middle" font-size="13">★</text>
+        <text class="tt" x="252" y="200" font-size="9">star link</text>
+
+        <!-- bleeder near node A, left margin -->
+        <rect x="74" y="150" width="13" height="18" rx="2" class="bd"/>
+        <rect x="74" y="172" width="13" height="18" rx="2" class="bd"/>
+        <text class="tt" x="34" y="165">R1·R2</text>
+        <text class="tt" x="40" y="179">200k</text>
+
+        <!-- dims -->
+        <line class="dim" x1="70" y1="76" x2="370" y2="76"/>
+        <line class="dim" x1="70" y1="72" x2="70" y2="80"/>
+        <line class="dim" x1="370" y1="72" x2="370" y2="80"/>
+        <text class="t" x="220" y="66" text-anchor="middle">≈55–60 × 48mm (see R6)</text>
+
+        <!-- wire-entry edge banner -->
+        <line class="dim" x1="90" y1="328" x2="300" y2="328" stroke-dasharray="4 3"/>
+        <text class="tk" x="220" y="350" text-anchor="middle">wire-entry edge — faces fiber board</text>
+
+        <!-- legend -->
+        <text class="tt" x="220" y="372" text-anchor="middle">● B+ ×4 · GP / GR = power / preamp gnds · ○ mounts isolated</text>
+        <text class="tt" x="220" y="388" text-anchor="middle">pours join at ★ star — link = 1 chassis tie, omit = dual return</text>
+
+        <!-- ===== EDGE VIEW · interior mount ===== -->
+        <text class="tt" x="430" y="26">EDGE VIEW · interior mount</text>
+
+        <!-- chassis floor + standoffs -->
+        <line class="bd" x1="430" y1="360" x2="706" y2="360"/>
+        <text class="tt" x="430" y="378">chassis — standoff mount</text>
+        <line class="bd" x1="476" y1="350" x2="476" y2="360"/>
+        <line class="bd" x1="588" y1="350" x2="588" y2="360"/>
+
+        <!-- fiber/eyelet board (left) -->
+        <rect x="470" y="170" width="12" height="180" fill="#efe9dd" stroke="#cdbfa0" stroke-width="1"/>
+        <text class="tt" x="476" y="158" text-anchor="middle" font-size="10">FIBER BD</text>
+
+        <!-- cap board (right) -->
+        <rect x="582" y="170" width="12" height="180" fill="#fff" stroke="#15171a" stroke-width="2"/>
+        <text class="tv" x="588" y="152" text-anchor="middle" font-size="10">wire / B+ side</text>
+        <text class="tt" x="588" y="140" text-anchor="middle" font-size="9">faces fiber board</text>
+
+        <!-- existing B+ wires across the gap -->
+        <line x1="482" y1="215" x2="582" y2="215" stroke="#a23b27" stroke-width="2"/>
+        <line x1="482" y1="250" x2="582" y2="250" stroke="#a23b27" stroke-width="2"/>
+        <line x1="482" y1="285" x2="582" y2="285" stroke="#a23b27" stroke-width="2"/>
+        <line x1="482" y1="320" x2="582" y2="320" stroke="#a23b27" stroke-width="2"/>
+        <text class="tv" x="532" y="205" text-anchor="middle" font-size="10">existing B+ wires</text>
+
+        <!-- wire-entry pads on fiber-board-facing face -->
+        <circle cx="582" cy="215" r="3.5" fill="#0a5f5c"/>
+        <circle cx="582" cy="250" r="3.5" fill="#0a5f5c"/>
+        <circle cx="582" cy="285" r="3.5" fill="#0a5f5c"/>
+        <circle cx="582" cy="320" r="3.5" fill="#0a5f5c"/>
+
+        <!-- caps stick out away from fiber board -->
+        <rect class="capf" x="594" y="184" width="74" height="20" rx="3"/>
+        <rect class="capf" x="594" y="214" width="74" height="20" rx="3"/>
+        <rect class="capf" x="594" y="244" width="74" height="20" rx="3"/>
+        <rect class="capf" x="594" y="274" width="74" height="20" rx="3"/>
+        <text class="tt" x="634" y="312" text-anchor="middle">caps → open interior</text>
+        <text class="tt" x="634" y="326" text-anchor="middle">(far face = GND plane)</text>
+      </svg>
+      <figcaption>Interior mount: the board sits among the circuitry with its wire-entry edge toward the fiber board, so the existing B+ wires cross straight over and solder on that face. Caps stand off the far face (which carries the ground plane) into open interior space. Stand it off the chassis on isolated mount holes; cap the empty can hole separately.</figcaption>
+    </div>
+  </section>
+
+  <!-- 5. LAYERS & ROUTING -->
+  <section>
+    <div class="sec-label"><span class="sec-num">05</span><h2>Layers &amp; routing</h2></div>
+    <p class="lede">Two copper layers, split by job. The side facing your fiber board carries every B+ trace and the wire-entry pads, so the existing wires land and solder on the face they come from — no wrapping around the board. The opposite side, under the caps and facing away from the fiber board, carries the two ground pours — power and preamp/reverb — split for low hum and joined only at the star.</p>
+    <div class="card fig">
+      <svg viewBox="0 0 720 350" role="img" aria-label="Two-layer stackup cross-section">
+        <defs><style>
+          .core{fill:#efe9dd;stroke:#cdbfa0;stroke-width:1}
+          .gnd{fill:#5b6168}
+          .bplus{fill:#a23b27}
+          .lead{stroke:#15171a;stroke-width:2.5;fill:none}
+          .leadp{stroke:#a23b27;stroke-width:2.5;fill:none}
+          .x{font-family:var(--mono,monospace);font-size:12px;fill:#15171a}
+          .xs{font-family:var(--mono,monospace);font-size:11px;fill:#454a4e}
+          .xg{font-family:var(--mono,monospace);font-size:11px;fill:#5b6168;font-weight:700}
+          .xb{font-family:var(--mono,monospace);font-size:11px;fill:#a23b27;font-weight:700}
+          .ld{stroke:#454a4e;stroke-width:1;fill:none}
+        </style></defs>
+        <rect class="core" x="140" y="190" width="440" height="22"/>
+        <text class="xs" x="360" y="205" text-anchor="middle">FR-4 core · 1.6mm</text>
+        <rect class="gnd" x="140" y="184" width="165" height="6"/>
+        <rect class="gnd" x="340" y="184" width="240" height="6"/>
+        <rect class="bplus" x="190" y="212" width="150" height="6"/>
+        <rect x="290" y="92" width="110" height="64" rx="5" fill="#a23b27" fill-opacity="0.08" stroke="#15171a" stroke-width="1.4"/>
+        <text class="xb" x="345" y="120" text-anchor="middle">C1</text>
+        <text class="xs" x="345" y="136" text-anchor="middle">47µF</text>
+        <line class="leadp" x1="322" y1="156" x2="322" y2="226"/>
+        <text class="xb" x="312" y="150">+</text>
+        <line class="lead" x1="400" y1="156" x2="400" y2="226"/>
+        <circle cx="400" cy="187" r="4" fill="#5b6168"/>
+        <text class="x" x="408" y="150">–</text>
+        <line class="leadp" x1="200" y1="215" x2="200" y2="300"/>
+        <circle cx="200" cy="215" r="5" fill="#a23b27"/>
+        <text class="xb" x="200" y="320" text-anchor="middle">B+ wire ↑ from fiber-board side</text>
+        <line class="ld" x1="470" y1="184" x2="470" y2="70"/>
+        <text class="xg" x="476" y="60">TOP Cu — GND pour (group)</text>
+        <text class="xs" x="476" y="74">cap side · faces away</text>
+        <line class="ld" x1="265" y1="218" x2="150" y2="270"/>
+        <text class="xb" x="58" y="285">BOTTOM Cu — B+ trace</text>
+        <text class="xs" x="58" y="299">+ wire-entry · faces fiber board</text>
+        <line class="ld" x1="322" y1="184" x2="250" y2="96"/>
+        <text class="x" x="118" y="92">≥2.5mm same-layer</text>
+        <text class="xs" x="118" y="106">clearance (B+ ↔ ground)</text>
+        <line class="ld" x1="600" y1="190" x2="600" y2="212"/>
+        <line class="ld" x1="596" y1="190" x2="604" y2="190"/>
+        <line class="ld" x1="596" y1="212" x2="604" y2="212"/>
+        <text class="x" x="612" y="198">1.6mm FR-4</text>
+        <text class="xs" x="612" y="212">ample at 420V —</text>
+        <text class="xs" x="612" y="226">B+ over plane OK</text>
+      </svg>
+      <figcaption>Cross-section through one cap and its wire-entry pad. B+ lives on the fiber-board side as fat, short traces; ground is a plane on the cap side. Opposite-layer isolation through 1.6mm FR-4 is ample at 420V, so B+ riding over the plane is fine — the spec that bites is <em>same-layer surface</em> clearance.</figcaption>
+    </div>
+    <div class="rules">
+      <div class="rule">
+        <h3>B+ traces</h3>
+        <p>Fat and short on the fiber-board side — <b>~2.5mm (100 mil)</b> wide. The current is tiny; the width is for HV robustness and handling, not ampacity. Teardrop the pad junctions and round corners to resist etch defects and cracking.</p>
+      </div>
+      <div class="rule">
+        <h3>Ground pours</h3>
+        <p>Two pours on the cap side — <b>GND-PWR</b> under caps A·B, <b>GND-PRE</b> under caps C·D — each pulled back <b>≥2.5mm</b> from B+. They meet only at the star link (one chassis tie), which keeps the rectifier's charging-pulse current off the preamp reference.</p>
+      </div>
+      <div class="rule">
+        <h3>Clearances</h3>
+        <p>Same-layer surface: ≥2.5mm B+↔B+ and B+↔ground (3mm where room allows). Opposite-layer through 1.6mm FR-4 is fine at 420V — for extra margin, clear the plane in the shadow directly beneath the B+ traces.</p>
+      </div>
+      <div class="rule">
+        <h3>Holes &amp; mounting</h3>
+        <p>Wire-entry ~1.6mm hole / ~3.3mm pad — a generous ring for hand soldering. Stitch the plane to the GND pad with a few vias. <b>Isolate both mount holes</b> from copper (or make exactly one the ground tie) so two chassis screws can't form a ground loop.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. DESIGN RULES -->
+  <section>
+    <div class="sec-label"><span class="sec-num">06</span><h2>Design rules to hold the line on</h2></div>
+    <div class="rules">
+      <div class="rule">
+        <h3><span class="r-no">R1</span>Creepage &amp; clearance</h3>
+        <p>Adjacent nodes can differ by 100–200V and the bus rides near 420V. Keep <b>≥2.5mm (0.1")</b> bare between any two HV nodes and from HV to the ground pour / chassis metal — more if the board allows. A routed slot between nodes and/or conformal coat buys margin. <code>IPC-2221</code> is the formal reference.</p>
+      </div>
+      <div class="rule">
+        <h3><span class="r-no">R2</span>Grounding</h3>
+        <p>Two pours: <b>GND-PWR</b> for the dirty returns (caps A·B + bleeder), <b>GND-PRE</b> for the clean preamp/reverb returns (caps C·D). They meet only at the <b>star link</b> — the single chassis tie. Fit the link for one ground wire, or omit it and run each pour to its own amp ground bus for a true split return. Either way, exactly one chassis connection; the rectifier center-tap lands on the power side at the star, never on the preamp pour.</p>
+      </div>
+      <div class="rule">
+        <h3><span class="r-no">R3</span>Bleeder &amp; service</h3>
+        <p>The 200k bleeder drains node A when the amp is off. Downstream nodes drain through the amp's dropping resistors <b>only while the board is connected</b>. Always meter every section to zero before servicing; add a bleeder per node if you want each section to self-drain when the board is pulled.</p>
+      </div>
+      <div class="rule">
+        <h3><span class="r-no">R4</span>Serviceability</h3>
+        <p>Existing B+ wires solder into labeled wire-entry pads — leave a little slack so the board lifts clear when you desolder. Silkscreen node labels (A/B+1 … D/B+4), values, and <b>polarity</b> at every pad. Lay out C4 to accept up to 47µF so node D stays retunable with an iron. Want tool-free removal later? Add FASTON tabs in parallel with the wire pads.</p>
+      </div>
+      <div class="rule">
+        <h3><span class="r-no">R6</span>Fab &amp; copper</h3>
+        <p>Well inside both <b>JLCPCB</b> and <b>OSH Park</b> 2-layer rules — our ≥2.5mm spacing dwarfs their ~0.15mm minimum, and 1.6mm wire-entry holes are routine. Standard <b>1oz copper</b> at either fab clears your ½oz floor; ripple currents here are small, so 2oz buys little. <b>OSH Park</b> prices by area (~$5/in² for 3, US-made, ENIG), so keep it ~50mm; <b>JLC</b> is a flat tier up to 100×100mm for 5 pcs, so size is effectively free and you can spread out. Skip OSH Park's 2oz option — it's a thinner 0.8mm board, and you want 1.6mm rigidity for a cover.</p>
+      </div>
+      <div class="rule">
+        <h3><span class="r-no">R5</span>Rectifier headroom</h3>
+        <p>47µF reservoir is inside the GZ34's ~60µF input-cap limit — fine. If you ever convert to solid-state rectification, add inrush limiting (series resistance / soft-start), since 47µF hits the PT harder on a cold start.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p class="mono">Princeton Reverb AA1164 — filter cap board · rev F · 47/22/22/33 µF @ 500V · split grounds (power | preamp/reverb) · interior mount · 1oz Cu</p>
+    <p>Reference design and starting point, not a finished manufacturing package. Verify node-to-stage mapping, the actual knockout/mount style, and final cap dimensions against your specific chassis before committing the board outline.</p>
+  </footer>
+
+</div>
+</body>
+</html>

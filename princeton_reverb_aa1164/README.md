@@ -8,6 +8,11 @@ Mounts inside the chassis among the existing circuitry, with the wire-entry hole
 on the edge facing the fiber/eyelet board so the existing B+ wiring lands straight
 across. The empty can knockout is covered separately (blanking plate / plug).
 
+> 📄 **Illustrated design reference:** [`design_reference.html`](design_reference.html)
+> — a single self-contained page with the schematic, board/mechanical drawings,
+> 2-layer stackup, full BOM, and the design rules (R1–R6) as inline SVG. Open it
+> in a browser; this README is the plain-text mirror.
+
 > ⚠️ **High voltage.** B+ on the reservoir node sits near **420 VDC** in operation,
 > and downstream nodes float up toward it during warm-up. Treat the whole board as
 > lethal. Discharge and meter every section to zero before handling.
@@ -82,17 +87,31 @@ GND-PRE to GND-PWR turns this into a 3-way split — it's only a pour assignment
 
 ## Bleeder
 
-2 × 100 kΩ 2 W in series (= 200 kΩ) across node A, returning to GND-PWR. Drains
-node A at power-off; downstream nodes drain through the amp's dropping resistors
-while the board is connected. **Always meter every section to zero before
-servicing.**
+2 × 100 kΩ 2 W (each ≥ 350 V working) in series (= 200 kΩ) across node A,
+returning to GND-PWR. Dissipates ~0.9 W total (~0.45 W each), split across the
+two so neither is stressed. Drains node A at power-off; downstream nodes drain
+through the amp's dropping resistors while the board is connected. **Always meter
+every section to zero before servicing.** Add a bleeder per node if you want each
+section to self-drain when the board is pulled.
+
+## Serviceability
+
+- Existing B+ wires solder into labeled wire-entry pads — leave a little slack so
+  the board lifts clear when you desolder.
+- Silkscreen node labels (A/B+1 … D/B+4), values, and **polarity** at every pad.
+- Want tool-free removal later? Add FASTON tabs in parallel with the wire pads.
 
 ## Fabrication
 
-- Within both **JLCPCB** and **OSH Park** 2-layer design rules.
+- Within both **JLCPCB** and **OSH Park** 2-layer design rules (the ≥ 2.5 mm
+  spacing dwarfs their ~0.15 mm minimum; 1.6 mm wire-entry holes are routine).
 - 1 oz copper is standard at both (meets the ≥ ½ oz target); 2 oz buys little here.
-- OSH Park prices by area — keep it ~50 mm. JLCPCB is a flat tier up to
-  100 × 100 mm, so size is effectively free there.
+- OSH Park prices by area (~$5/in², 3 pcs, US-made ENIG) — keep it ~50 mm. Skip
+  its 2 oz option: that's a thinner 0.8 mm board, and you want 1.6 mm rigidity.
+- JLCPCB is a flat tier (5 pcs) up to 100 × 100 mm, so size is effectively free.
+- If you ever convert to **solid-state rectification**, add inrush limiting
+  (series resistance / soft-start) — 47 µF hits the PT harder on a cold start
+  than the GZ34 does.
 
 ## Bill of materials
 
