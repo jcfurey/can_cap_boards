@@ -94,18 +94,36 @@ servicing.**
 - OSH Park prices by area — keep it ~50 mm. JLCPCB is a flat tier up to
   100 × 100 mm, so size is effectively free there.
 
+## Bill of materials
+
+See [`BOM.md`](BOM.md) — the four filter caps, the bleeder, and the ground star
+link (the inter-node dropping resistors stay on the amp's eyelet board).
+
 ## Simulation
 
-_TODO_ — SPICE model of the AA1164 power supply (GZ34 + dropping network) to
-verify ripple at each node and sag behavior with the 47/22/22/33 µF set.
+ngspice model of the AA1164 supply (GZ34 + dropping network) lives in
+[`sim/`](sim/) — see [`sim/README.md`](sim/README.md). It confirms the
+47/22/22/33 µF set:
+
+| Node | DC (idle) | Ripple (idle) | DC (full output) |
+|------|----------:|--------------:|-----------------:|
+| A (reservoir) | 420.7 V | 8.0 V pp | 403.5 V |
+| B (screens) | 405.7 V | 0.41 V pp | 384.5 V |
+| C (PI/reverb) | 358.7 V | 5.1 mV pp | 337.5 V |
+| D (preamp) | 318.7 V | 0.1 mV pp | 297.5 V |
+
+Node A sits at ~420 V as designed, the larger reservoir roughly thirds the
+stock ripple, the hum-sensitive preamp nodes are filtered to ≤ mV, and the GZ34
+sags node A ~17 V at full output (the expected blackface "compression").
 
 ## Status
 
 - [x] Electrical design (rev F)
+- [x] Bill of materials
+- [x] SPICE supply sim
 - [ ] KiCad schematic
 - [ ] KiCad layout
 - [ ] Fabrication outputs (gerbers)
-- [ ] SPICE supply sim
 - [ ] Built & tested
 
 ## License
