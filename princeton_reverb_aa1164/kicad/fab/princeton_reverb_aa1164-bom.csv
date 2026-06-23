@@ -1,0 +1,13 @@
+Qty,Value,Footprint,References
+1,47µF,Capacitor_THT:CP_Radial_D16.0mm_P7.50mm,C1
+2,22µF,Capacitor_THT:CP_Radial_D16.0mm_P7.50mm,"C2,C3"
+1,33µF,Capacitor_THT:CP_Radial_D16.0mm_P7.50mm,C4
+2,MountingHole,MountingHole:MountingHole_3.2mm_M3,"H1,H2"
+1,STAR,wire_entry:StarTie_8mm,NT1
+1,B+1_A,wire_entry:WireEntry_BPlus,P1
+1,B+2_B,wire_entry:WireEntry_BPlus,P2
+1,B+3_C,wire_entry:WireEntry_BPlus,P3
+1,B+4_D,wire_entry:WireEntry_BPlus,P4
+1,GND-PWR,wire_entry:WireEntry_GND,P5
+1,GND-PRE,wire_entry:WireEntry_GND,P6
+2,100k,Resistor_THT:R_Axial_DIN0414_L11.9mm_D4.5mm_P5.08mm_Vertical,"R1,R2"

@@ -8,6 +8,11 @@ Mounts inside the chassis among the existing circuitry, with the wire-entry hole
 on the edge facing the fiber/eyelet board so the existing B+ wiring lands straight
 across. The empty can knockout is covered separately (blanking plate / plug).
 
+> 📄 **Illustrated design reference:** [`design_reference.html`](design_reference.html)
+> — a single self-contained page with the schematic, board/mechanical drawings,
+> 2-layer stackup, full BOM, and the design rules (R1–R6) as inline SVG. Open it
+> in a browser; this README is the plain-text mirror.
+
 > ⚠️ **High voltage.** B+ on the reservoir node sits near **420 VDC** in operation,
 > and downstream nodes float up toward it during warm-up. Treat the whole board as
 > lethal. Discharge and meter every section to zero before handling.
@@ -82,30 +87,73 @@ GND-PRE to GND-PWR turns this into a 3-way split — it's only a pour assignment
 
 ## Bleeder
 
-2 × 100 kΩ 2 W in series (= 200 kΩ) across node A, returning to GND-PWR. Drains
-node A at power-off; downstream nodes drain through the amp's dropping resistors
-while the board is connected. **Always meter every section to zero before
-servicing.**
+2 × 100 kΩ 2 W (each ≥ 350 V working) in series (= 200 kΩ) across node A,
+returning to GND-PWR. Dissipates ~0.9 W total (~0.45 W each), split across the
+two so neither is stressed. Drains node A at power-off; downstream nodes drain
+through the amp's dropping resistors while the board is connected. **Always meter
+every section to zero before servicing.** Add a bleeder per node if you want each
+section to self-drain when the board is pulled.
+
+## Serviceability
+
+- Existing B+ wires solder into labeled wire-entry pads — leave a little slack so
+  the board lifts clear when you desolder.
+- Silkscreen node labels (A/B+1 … D/B+4), values, and **polarity** at every pad.
+- Want tool-free removal later? Add FASTON tabs in parallel with the wire pads.
 
 ## Fabrication
 
-- Within both **JLCPCB** and **OSH Park** 2-layer design rules.
+- Within both **JLCPCB** and **OSH Park** 2-layer design rules (the ≥ 2.5 mm
+  spacing dwarfs their ~0.15 mm minimum; 1.6 mm wire-entry holes are routine).
 - 1 oz copper is standard at both (meets the ≥ ½ oz target); 2 oz buys little here.
-- OSH Park prices by area — keep it ~50 mm. JLCPCB is a flat tier up to
-  100 × 100 mm, so size is effectively free there.
+- OSH Park prices by area (~$5/in², 3 pcs, US-made ENIG) — keep it ~50 mm. Skip
+  its 2 oz option: that's a thinner 0.8 mm board, and you want 1.6 mm rigidity.
+- JLCPCB is a flat tier (5 pcs) up to 100 × 100 mm, so size is effectively free.
+- If you ever convert to **solid-state rectification**, add inrush limiting
+  (series resistance / soft-start) — 47 µF hits the PT harder on a cold start
+  than the GZ34 does.
+
+## Bill of materials
+
+See [`BOM.md`](BOM.md) — the four filter caps, the bleeder, and the ground star
+link (the inter-node dropping resistors stay on the amp's eyelet board).
 
 ## Simulation
 
-_TODO_ — SPICE model of the AA1164 power supply (GZ34 + dropping network) to
-verify ripple at each node and sag behavior with the 47/22/22/33 µF set.
+ngspice model of the AA1164 supply (GZ34 + dropping network) lives in
+[`sim/`](sim/) — see [`sim/README.md`](sim/README.md). It confirms the
+47/22/22/33 µF set:
+
+| Node | DC (idle) | Ripple (idle) | DC (full output) |
+|------|----------:|--------------:|-----------------:|
+| A (reservoir) | 420.7 V | 8.0 V pp | 403.5 V |
+| B (screens) | 405.7 V | 0.41 V pp | 384.5 V |
+| C (PI/reverb) | 358.7 V | 5.1 mV pp | 337.5 V |
+| D (preamp) | 318.7 V | 0.1 mV pp | 297.5 V |
+
+Node A sits at ~420 V as designed, the larger reservoir roughly thirds the
+stock ripple, the hum-sensitive preamp nodes are filtered to ≤ mV, and the GZ34
+sags node A ~17 V at full output (the expected blackface "compression").
+
+## KiCad project
+
+A KiCad 7 project lives in [`kicad/`](kicad/) — see [`kicad/README.md`](kicad/README.md).
+Schematic + 2-layer board, **ERC/DRC-clean (0 errors)**, with the split-ground
+star-tie and 2.5 mm HV creepage encoded as rules. Fabrication outputs (Gerbers,
+drill, BOM, position) are in [`kicad/fab/`](kicad/fab/).
+
+> These are an auto-generated **starting point**: electrically complete and
+> rule-clean, but placement/mechanical fit must be verified in the GUI before
+> fabbing (board outline, wire-entry positions vs your chassis, exact cap cases).
 
 ## Status
 
 - [x] Electrical design (rev F)
-- [ ] KiCad schematic
-- [ ] KiCad layout
-- [ ] Fabrication outputs (gerbers)
-- [ ] SPICE supply sim
+- [x] Bill of materials
+- [x] SPICE supply sim
+- [x] KiCad schematic (ERC-clean)
+- [x] KiCad layout (DRC-clean starter — refine mechanical fit in GUI)
+- [x] Fabrication outputs (gerbers) — starter set, re-export after refining
 - [ ] Built & tested
 
 ## License

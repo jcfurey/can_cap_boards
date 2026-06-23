@@ -1,0 +1,13 @@
+Ref,Val,Package,PosX,PosY,Rot,Side
+"C1","47uF","CP_Radial_D16.0mm_P7.50mm",16.250000,-16.000000,0.000000,top
+"C2","22uF","CP_Radial_D16.0mm_P7.50mm",16.250000,-40.000000,0.000000,top
+"C3","22uF","CP_Radial_D16.0mm_P7.50mm",42.250000,-16.000000,0.000000,top
+"C4","33uF","CP_Radial_D16.0mm_P7.50mm",42.250000,-40.000000,0.000000,top
+"P1","B+1_A","WireEntry_BPlus",16.250000,-7.000000,0.000000,top
+"P2","B+2_B","WireEntry_BPlus",16.250000,-49.000000,0.000000,top
+"P3","B+3_C","WireEntry_BPlus",42.250000,-7.000000,0.000000,top
+"P4","B+4_D","WireEntry_BPlus",42.250000,-49.000000,0.000000,top
+"P5","GND-PWR","WireEntry_GND",9.000000,-49.000000,0.000000,top
+"P6","GND-PRE","WireEntry_GND",55.000000,-49.000000,0.000000,top
+"R1","100k","R_Axial_DIN0414_L11.9mm_D4.5mm_P5.08mm_Vertical",6.000000,-11.000000,-90.000000,top
+"R2","100k","R_Axial_DIN0414_L11.9mm_D4.5mm_P5.08mm_Vertical",6.000000,-23.000000,-90.000000,top

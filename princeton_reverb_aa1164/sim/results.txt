@@ -1,0 +1,36 @@
+Using SPARSE 1.3 as Direct Linear Solver
+
+Note: No compatibility mode selected!
+
+
+Circuit: AA1164 Princeton Reverb PSU - 47/22/22/33uF filter board
+
+Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
+
+Using transient initial conditions
+ Reference value :  1.32798e+00 Reference value :  2.61384e+00 Reference value :  3.93728e+00 Reference value :  5.36801e+00 Reference value :  6.75679e+00
+No. of Data Rows : 408349
+a_dc                =  4.207315e+02 from=  7.950000e+00 to=  8.000000e+00
+a_min               =  4.167539e+02 at=  7.953048e+00
+a_max               =  4.247978e+02 at=  7.963488e+00
+b_dc                =  4.057315e+02 from=  7.950000e+00 to=  8.000000e+00
+b_min               =  4.054870e+02 at=  7.987366e+00
+b_max               =  4.058965e+02 at=  7.999726e+00
+c_dc                =  3.587314e+02 from=  7.950000e+00 to=  8.000000e+00
+c_min               =  3.587288e+02 at=  7.997426e+00
+c_max               =  3.587339e+02 at=  7.952110e+00
+d_dc                =  3.187311e+02 from=  7.950000e+00 to=  8.000000e+00
+d_min               =  3.187310e+02 at=  7.950010e+00
+d_max               =  3.187311e+02 at=  7.995752e+00
+
+===================================================================
+AA1164 PSU steady-state  (last 50 ms @ 8 s, 120 Hz ripple)
+===================================================================
+Node  Cap     DC (V)     ripple pk-pk (mV)
+-------------------------------------------------------------------
+A     47uF    420.732      8043.9
+B     22uF    405.731      409.5
+C     22uF    358.731      5.1
+D     33uF    318.731      0.1
+===================================================================
+Note: Simulation executed from .control section 

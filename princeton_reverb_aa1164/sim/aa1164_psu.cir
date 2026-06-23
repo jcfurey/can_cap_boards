@@ -1,0 +1,117 @@
+* ============================================================================
+* Princeton Reverb (AA1164) power supply -- filter-cap board verification
+* ----------------------------------------------------------------------------
+* Purpose: verify ripple at each B+ node and DC sag with the new filter set
+*          A/B/C/D = 47 / 22 / 22 / 33 uF (this board) feeding the standard
+*          AA1164 dropping network.
+*
+* GZ34/5AR4 full-wave centre-tapped rectifier -> reservoir, then the stock
+* RC dropping chain. Tube rectifier is approximated by a solid-state diode
+* plus series resistance (RS in the .model + the winding R) -- this is the
+* usual PSU-sim approximation and is good enough for ripple/sag, but it does
+* NOT reproduce the GZ34's slow indirectly-heated warm-up (intentional: we
+* want steady-state numbers here, not the turn-on transient).
+*
+* Units: ngspice. Run with:  ngspice -b aa1164_psu.cir
+* All component values are the STANDARD AA1164 schematic values; verify
+* against your own chassis (especially the PT secondary) before trusting
+* absolute volts. Ripple figures are robust to small value errors.
+* ============================================================================
+
+.title AA1164 Princeton Reverb PSU - 47/22/22/33uF filter board
+
+* ---- Parameters ------------------------------------------------------------
+* PT high-voltage secondary, each half (CT to end), RMS.  Fender 125P1B class.
+.param VRMS   = 330
+.param VPK    = {VRMS*sqrt(2)}
+.param FLINE  = 60
+.param RSEC   = 75        ; ohms, DCR of each secondary half + reflected primary
+
+* ---- Mains / transformer secondary (centre tap = node 0 = power ground) -----
+Vsa  sa 0  SIN(0 {VPK} {FLINE})
+Vsb  sb 0  SIN(0 {VPK} {FLINE} 0 0 180)
+Rsa  sa  pa  {RSEC}
+Rsb  sb  pb  {RSEC}
+
+* ---- GZ34 rectifier (two plates) -------------------------------------------
+Dra  pa  A  DGZ34
+Drb  pb  A  DGZ34
+.model DGZ34 D(IS=1e-9 N=1.8 RS=60 BV=1500 CJO=20p)
+
+* ---- Filter board: nodes A (B+1) .. D (B+4) --------------------------------
+* A = reservoir / 6V6 plates       47 uF
+* B = screens                      22 uF   (1k from A)
+* C = PI / reverb driver           22 uF   (4.7k from B)
+* D = preamp / reverb recovery     33 uF   (10k from C)
+CA   A 0  47u
+CB   B 0  22u
+CC   C 0  22u
+CD   D 0  33u
+
+RAB  A B  1k
+RBC  B C  4.7k
+RCD  C D  10k
+
+* Bleeder across node A: 2x100k 2W in series = 200k to ground
+Rbld A 0  200k
+
+* ---- Loads (tube draw, modelled as DC current sinks per node) ---------------
+* Idle-ish operating point. Total ~ 60 mA HT, typical for a Princeton Reverb.
+* For the full-output sag case in sim/README.md, set IA=80m and IB=9m.
+.param IA = 45m     ; 6V6 plates (push-pull pair) via OT centre tap
+.param IB = 5m      ; 6V6 screens
+.param IC = 6m      ; phase inverter + reverb driver
+.param ID = 4m      ; preamp + reverb recovery + tremolo
+Ila  A 0  {IA}
+Ilb  B 0  {IB}
+Ilc  C 0  {IC}
+Ild  D 0  {ID}
+
+* ---- Analysis --------------------------------------------------------------
+.options reltol=1e-4 abstol=1e-9 method=gear
+* Run to 8 s: the dropping-chain settling tail (slow node-D pole, see README)
+* must fully decay before the downstream ripple reads are meaningful.
+.tran 20u 8.0 0 20u uic
+
+.control
+  run
+
+  * --- steady state: analyse the last 50 ms (6 line cycles) of the 8 s run.
+  * Full-wave rectification => ripple fundamental is 120 Hz (2x 60 Hz line).
+  meas tran A_dc  AVG v(A) from=7.95 to=8.0
+  meas tran A_min MIN v(A) from=7.95 to=8.0
+  meas tran A_max MAX v(A) from=7.95 to=8.0
+  meas tran B_dc  AVG v(B) from=7.95 to=8.0
+  meas tran B_min MIN v(B) from=7.95 to=8.0
+  meas tran B_max MAX v(B) from=7.95 to=8.0
+  meas tran C_dc  AVG v(C) from=7.95 to=8.0
+  meas tran C_min MIN v(C) from=7.95 to=8.0
+  meas tran C_max MAX v(C) from=7.95 to=8.0
+  meas tran D_dc  AVG v(D) from=7.95 to=8.0
+  meas tran D_min MIN v(D) from=7.95 to=8.0
+  meas tran D_max MAX v(D) from=7.95 to=8.0
+
+  let A_pp = (A_max - A_min) * 1000
+  let B_pp = (B_max - B_min) * 1000
+  let C_pp = (C_max - C_min) * 1000
+  let D_pp = (D_max - D_min) * 1000
+
+  echo
+  echo "==================================================================="
+  echo "AA1164 PSU steady-state  (last 50 ms @ 8 s, 120 Hz ripple)"
+  echo "==================================================================="
+  echo "Node  Cap     DC (V)     ripple pk-pk (mV)"
+  echo "-------------------------------------------------------------------"
+  echo "A     47uF    $&A_dc      $&A_pp"
+  echo "B     22uF    $&B_dc      $&B_pp"
+  echo "C     22uF    $&C_dc      $&C_pp"
+  echo "D     33uF    $&D_dc      $&D_pp"
+  echo "==================================================================="
+
+  * write the full waveform set for plotting/inspection
+  set wr_singlescale
+  set wr_vecnames
+  wrdata aa1164_psu_nodes.dat v(A) v(B) v(C) v(D)
+.endc
+
+.end
