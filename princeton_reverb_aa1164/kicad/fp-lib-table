@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "wire_entry")(type "KiCad")(uri "${KIPRJMOD}/wire_entry.pretty")(options "")(descr "Project wire-entry pads"))
+)

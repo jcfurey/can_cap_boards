@@ -135,14 +135,25 @@ Node A sits at ~420 V as designed, the larger reservoir roughly thirds the
 stock ripple, the hum-sensitive preamp nodes are filtered to ≤ mV, and the GZ34
 sags node A ~17 V at full output (the expected blackface "compression").
 
+## KiCad project
+
+A KiCad 7 project lives in [`kicad/`](kicad/) — see [`kicad/README.md`](kicad/README.md).
+Schematic + 2-layer board, **ERC/DRC-clean (0 errors)**, with the split-ground
+star-tie and 2.5 mm HV creepage encoded as rules. Fabrication outputs (Gerbers,
+drill, BOM, position) are in [`kicad/fab/`](kicad/fab/).
+
+> These are an auto-generated **starting point**: electrically complete and
+> rule-clean, but placement/mechanical fit must be verified in the GUI before
+> fabbing (board outline, wire-entry positions vs your chassis, exact cap cases).
+
 ## Status
 
 - [x] Electrical design (rev F)
 - [x] Bill of materials
 - [x] SPICE supply sim
-- [ ] KiCad schematic
-- [ ] KiCad layout
-- [ ] Fabrication outputs (gerbers)
+- [x] KiCad schematic (ERC-clean)
+- [x] KiCad layout (DRC-clean starter — refine mechanical fit in GUI)
+- [x] Fabrication outputs (gerbers) — starter set, re-export after refining
 - [ ] Built & tested
 
 ## License
